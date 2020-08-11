@@ -1,0 +1,22 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: iotservices.cp.iot.sap
+spec:
+  group: cp.iot.sap
+  names:
+    kind: IoTService
+    listKind: IoTServiceList
+    plural: iotservices
+    singular: iotservice
+    shortNames:
+      - iot
+  scope: Namespaced
+  version: v1alpha1
+  additionalPrinterColumns:
+    - name: Status
+      type: string
+      description: The status of the service instance
+      JSONPath: .status.phase
+  subresources:
+    status: {}

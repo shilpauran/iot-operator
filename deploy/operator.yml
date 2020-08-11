@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iot-operator
+  # Replace this with the namespace the operator is deployed in.
+  namespace: devawsk8s
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: iot-operator
+  template:
+    metadata:
+      labels:
+        name: iot-operator
+    spec:
+      serviceAccountName: iot-operator
+      containers:
+        - name: iot-operator
+          # Replace the placeholder with the built image version
+          image: iot-service-dev.docker.repositories.sap.ondemand.com/iot-operator:REPLACE_VERSION
+          ports:
+          - containerPort: 60000
+            name: metrics
+          resources:
+            requests:
+              memory: 300Mi
+            limits:
+              memory: 500Mi
+          command:
+          - iot-operator
+          imagePullPolicy: Always
+          readinessProbe:
+            exec:
+              command:
+                - stat
+                - /tmp/operator-sdk-ready
+            initialDelaySeconds: 4
+            periodSeconds: 10
+            failureThreshold: 1
+          env:
+            - name: WATCH_NAMESPACE
+              value: ""
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              # Replace this with the namespace the operator is deployed in.
+              value: "devawsk8s"
+      imagePullSecrets:
+      - name: image-pull-secret
+

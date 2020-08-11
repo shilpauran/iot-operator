@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  # Replace this with the namespace the operator is deployed in.
+  name: <OPERATOR-NAMESPACE> # e.g. d012345
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: image-pull-secret
+  # Replace this with the namespace the operator is deployed in.
+  namespace: <OPERATOR-NAMESPACE> # e.g. d012345
+type: kubernetes.io/dockerconfigjson
+data:
+  # Replace this accordingly
+  .dockerconfigjson: <IMAGE-PULL-SECRET> # base64 encoded JSON {"auths":{"iot-service-dev.docker.repositories.sap.ondemand.com":{"username":"iot-dev","password":"<artifactory password>","email":"<your mail address>"}, "iot-devawsk8s-dev.docker.repositories.sap.ondemand.com":{"username":"iot-dev","password":"<artifactory password>","email":"<your mail address>"}, "iot-devawsk8s-rel.docker.repositories.sap.ondemand.com":{"username":"iot-dev","password":"<artifactory password>","email":"<your mail address>"}}}>
+  
